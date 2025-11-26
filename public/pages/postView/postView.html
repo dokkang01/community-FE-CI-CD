@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>게시글 상세</title>
+    <script src="/lib/config.js"></script>
+    <script type="module">
+      import { ensureAuthPage } from "/auth/authGuard.js";
+      await ensureAuthPage();
+    </script>
+    <link rel="stylesheet" href="/component/header/header.css" />
+    <link rel="stylesheet" href="./postView.css" />
+  </head>
+  <body>
+    <!-- Fixed/common header mount -->
+    <div id="header-placeholder" role="banner"></div>
+
+    <main id="post-view" class="post-view" role="main">
+      <article class="post" aria-labelledby="post-title">
+        <!-- 제목 -->
+        <h1 id="post-title" class="post-title">게시물 제목</h1>
+
+        <!-- 작성자/메타 + 우측 액션 버튼 -->
+        <div class="post-meta">
+          <div class="author">
+            <img id="author-avatar" class="author-avatar" src="/assets/images/user.png" alt="작성자 프로필 이미지" />
+            <div class="author-info">
+              <span id="author-nickname" class="author-nickname">닉네임</span>
+              <time id="created-at" class="created-at" datetime="2025-10-23T09:00:00+09:00">2025-10-23 09:00</time>
+            </div>
+          </div>
+          <div class="post-actions">
+            <button type="button" class="btn btn-edit">수정</button>
+            <button type="button" class="btn btn-delete">삭제</button>
+          </div>
+        </div>
+
+        <!-- 구분선 -->
+        <hr class="divider" />
+
+        <!-- 본문 내용 -->
+        <section class="post-content" aria-label="게시글 내용">
+          <div class="content-body">
+            <p>여기에 게시글 내용이 들어갑니다. 백엔드 연동 전 임시 텍스트입니다. 줄바꿈과 이미지 등 다양한 컨텐츠가 배치될 수 있습니다.</p>
+          </div>
+        </section>
+
+        <!-- 지표 카드 -->
+        <section class="post-stats" aria-label="게시글 지표">
+          <div class="stat-card" aria-label="좋아요 수">
+            <div class="stat-label">좋아요</div>
+            <div class="stat-value" id="like-count">0</div>
+          </div>
+          <div class="stat-card" aria-label="조회수">
+            <div class="stat-label">조회수</div>
+            <div class="stat-value" id="view-count">0</div>
+          </div>
+          <div class="stat-card" aria-label="댓글 수">
+            <div class="stat-label">댓글</div>
+            <div class="stat-value" id="comment-count">0</div>
+          </div>
+        </section>
+
+        <!-- 하단 구분선 -->
+        <hr class="divider" />
+
+        <!-- 댓글 영역 -->
+        <section class="comments" aria-label="댓글">
+          <div class="comment-form">
+            <textarea class="comment-input" id="comment-input" placeholder="댓글을 입력하세요..." rows="3"></textarea>
+            <button class="btn btn-primary comment-submit" type="button">등록</button>
+          </div>
+          <h2 class="comments-title">댓글</h2>
+          <ul class="comment-list">
+            <li class="comment-item">
+              <div class="comment-meta">
+                <img class="comment-avatar" src="/assets/images/user.png" alt="댓글 작성자" />
+                <span class="comment-author">홍길동</span>
+                <time class="comment-time" datetime="2025-10-23T09:30:00+09:00">2025-10-23 09:30</time>
+              </div>
+              <p class="comment-text">백엔드 연결 전, 예시 댓글입니다.</p>
+            </li>
+            <li class="comment-item">
+              <div class="comment-meta">
+                <img class="comment-avatar" src="/assets/images/user.png" alt="댓글 작성자" />
+                <span class="comment-author">아무개</span>
+                <time class="comment-time" datetime="2025-10-23T10:00:00+09:00">2025-10-23 10:00</time>
+              </div>
+              <p class="comment-text">두 번째 댓글 예시입니다.</p>
+            </li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <script type="module">
+  import { mountHeader } from "/component/header/insertHeader.js";
+  (async () => {
+    await mountHeader("header-placeholder", {
+      addProfileMenu: true,
+      addBackButton: true,
+      backHref: "/pages/board/board.html",
+    });
+  })();
+</script>
+  </body>
+</html>

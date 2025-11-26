@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>아무말 대잔치 | 회원가입</title>
+  <script src="/lib/config.js"></script>
+  <link rel="stylesheet" href="/component/header/header.css" />
+  <link rel="stylesheet" href="signup.css" />
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <main class="container" aria-labelledby="page-title" style="margin-top: 120px;">
+      <h1 id="page-title" class="page-title" style="text-align: center;">회원가입</h1>
+    <section class="signup-page">
+      
+      <form id="signup-form" novalidate>
+        
+        <div class="field">
+          <label for="profile">프로필 사진*</label>
+          <div class="upload-area" id="upload-area" aria-label="프로필 사진 업로드" tabindex="0">
+            <img id="preview" alt="미리보기" style="display:none;" />
+          </div>
+          <input type="file" id="profile" name="profile" accept="image/*" style="display:none;" />
+        </div>
+      
+        <div class="field">
+          <label for="email">이메일*</label>
+          <div>
+            <input id="email" name="email" type="email" placeholder="이메일을 입력하세요" required aria-describedby="email-help" />
+          </div>
+          <small id="email-help" class="input-help"></small>
+        </div>
+
+        <div class="field">
+          <label for="password">비밀번호*</label>
+          <div>
+            <input id="password" name="password" type="password" placeholder="비밀번호를 입력하세요" required minlength="6" aria-describedby="password-help" />
+          </div>
+          <small id="password-help" class="input-help"></small>
+        </div>
+
+        <div class="field">
+          <label for="password2">비밀번호 확인*</label>
+          <div>
+            <input id="password2" name="password2" type="password" placeholder="비밀번호를 한번 더 입력하세요" minlength="6" aria-describedby="password2-help" />
+          </div>
+          <small id="password2-help" class="input-help"></small>
+        </div>
+
+        <div class="field">
+          <label for="username">닉네임*</label>
+          <div>
+            <input id="username" name="username" type="text" placeholder="닉네임을 입력하세요" minlength="3" aria-describedby="username-help" />
+          </div>
+          <small id="username-help" class="input-help"></small>
+        </div>
+
+        <div class="actions">
+          <div>
+            <button id="submit-btn" type="submit">회원가입</button>
+          </div>
+          <button type="button" id="go-login">로그인하러 가기</button>
+        </div>
+        <div id="form-error" class="input-help" role="alert" aria-live="assertive" style="text-align:center;"></div>
+        <div id="form-success" role="status" aria-live="polite" style="text-align:center; color:#2ecc71; margin-top:6px;"></div>
+      </form>
+      <div id="message" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { mountHeader } from "/component/header/insertHeader.js";
+    (async () => {
+      await mountHeader("header-placeholder", {
+        addProfileMenu: false,
+        addBackButton: true,
+        backHref: "/pages/login/login.html",
+      });
+    })();
+  </script>
+  <script src="signup.js"></script>
+</body>
+</html>

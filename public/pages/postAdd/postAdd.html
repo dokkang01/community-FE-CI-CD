@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>게시글 작성</title>
+  <script src="/lib/config.js"></script>
+  <script type="module">
+    import { ensureAuthPage } from "/auth/authGuard.js";
+    await ensureAuthPage();
+  </script>
+  <link rel="stylesheet" href="/component/header/header.css" />
+  <link rel="stylesheet" href="./postAdd.css" />
+  <script type="module">
+    import { mountHeader } from "/component/header/insertHeader.js";
+    (async () => { await mountHeader(); })();
+  </script>
+  <script defer src="./postAdd.js"></script>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="container" aria-labelledby="page-title" style="margin-top: 120px;">
+    <h1 id="page-title" class="page-title" style="text-align: center;">게시글 작성</h1>
+
+    <form id="post-form" class="post-form">
+      <div class="field">
+        <label for="post-title" class="label">제목</label>
+        <input id="post-title" name="title" type="text" placeholder="제목을 입력해주세요 (최대 26글자)." required />
+      </div>
+      <div class="field">
+        <label for="post-content" class="label">내용</label>
+        <textarea id="post-content" name="content" placeholder="내용을 입력해주세요." rows="12" required></textarea>
+      </div>
+
+      <div class="field inline">
+        <label class="label">이미지</label>
+        <input id="post-image" type="file" accept="image/*" hidden />
+        <button id="upload-btn" type="button" class="btn">이미지 업로드</button>
+      </div>
+
+     
+      <div class="actions">
+        <button id="submit-btn" type="submit" class="btn primary">완료</button>
+      </div>
+
+      <p id="error" class="message error" aria-live="polite"></p>
+      <p id="success" class="message success" aria-live="polite"></p>
+    </form>
+  </main>
+  <script type="module">
+  import { mountHeader } from "/component/header/insertHeader.js";
+  (async () => {
+    await mountHeader("header-placeholder", {
+      addProfileMenu: true,
+      addBackButton: true,
+      backHref: "/pages/board/board.html",
+    });
+  })();
+</script>
+</body>
+</html>

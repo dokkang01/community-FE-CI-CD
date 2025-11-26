@@ -1,0 +1,73 @@
+ <!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>김도의 카테부 프론트엔드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href = "#/signup">/signup</a>
+      <div></div>
+      <a href = "#/login">/login</a>
+    </nav>
+  </header>
+  <main id="app"><!--이곳에 페이지 컨텐트 주입--></main>
+  <script type="module">
+  const routes = {
+    '/': './pages/board/board.html',
+    '/board': './pages/board/board.html',
+    '/postAdd': './pages/postAdd/postAdd.html',
+    '/postView': './pages/postView/postView.html',
+    '/postUpdate': './pages/postUpdate/postUpdate.html',
+    '/login': './pages/login/login.html',
+    '/signup': './pages/signup/signup.html',
+    '/updateUserInfo': './pages/updateUserInfo/updateUserInfo.html',
+    '/updateUserPassword': './pages/updateUserPassword/updateUserPassword.html'
+  };
+  const app = document.getElementById(`app`);
+  async function loadRoute() {
+    const hash = location.hash.replace('#', '') || '/';
+    const routePath = routes[hash] || routes['/'];
+    try {
+      const res = await fetch(routePath, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Not found');
+      const html = await res.text();
+      app.innerHTML = html;
+      await loadPageScript(hash);
+      window.scrollTo(0,0);
+    } catch (err) {
+      console.error(err);
+      app.innerHTML = '<h2>페이지를 찾을 수 없습니다.</h2>';
+    }
+  }
+
+  async function loadPageScript(hash) {
+    const name = (hash || '/').replace(/^\//, '') || 'board';
+    const scriptPath = `./pages/${name}/${name}.js`;
+
+    // remove previous dynamic script
+    const prev = document.getElementById('page-script');
+    if (prev) prev.remove();
+
+    // Check if the page script exists, then inject it
+    try {
+      const headResp = await fetch(scriptPath, { method: 'HEAD' });
+      if (headResp.ok) {
+        const s = document.createElement('script');
+        s.src = scriptPath;
+        s.id = 'page-script';
+        document.body.appendChild(s);
+      }
+    } catch (e) {
+      // ignore: script not present or fetch failed
+    }
+  }
+
+  window.addEventListener('hashchange', loadRoute);
+  window.addEventListener('load', loadRoute);
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>회원정보 수정</title>
+    <script src="/lib/config.js"></script>
+    <script type="module">
+      import { ensureAuthPage } from "/auth/authGuard.js";
+      await ensureAuthPage();
+    </script>
+    <link rel="stylesheet" href="/component/header/header.css" />
+    <!-- Page styles -->
+    <link rel="stylesheet" href="./updateUserInfo.css" />
+  </head>
+  <body>
+    <!-- Fixed/common header mount -->
+    <div id="header-placeholder" role="banner"></div>
+
+    <main id="profile-edit" class="profile-edit" role="main">
+      <h1 class="page-title">회원정보수정</h1>
+
+      <!-- 프로필 사진 -->
+      <section class="field">
+        <label class="field-label">*프로필 사진</label>
+
+        <div class="avatar-wrap" id="avatarWrap" tabindex="0" role="button" aria-label="프로필 사진 변경">
+          <img
+            id="avatarImg"
+            class="avatar-img"
+            src="/assets/images/user.png"
+            alt="현재 프로필 사진"
+            loading="lazy"
+          />
+          <div class="avatar-overlay">변경</div>
+          <input id="avatarFile" type="file" accept="image/*" hidden />
+        </div>
+        <p class="hint">이미지를 클릭하여 변경</p>
+      </section>
+
+      <!-- 닉네임 -->
+      <section class="field">
+        <label class="field-label" for="nicknameInput">닉네임</label>
+        <input id="nicknameInput" class="text-input" type="text" placeholder="새 닉네임 입력" />
+      </section>
+
+      <!-- 액션 버튼들 -->
+      <div class="actions">
+        <button id="saveBtn" class="btn btn-primary" type="button">수정하기</button>
+        <button id="deleteBtn" class="btn btn-danger" type="button">회원탈퇴</button>
+      </div>
+
+      <!-- 완료 버튼 (게시판으로 이동) -->
+      <div class="actions">
+        <button id="doneBtn" class="btn btn-ghost" type="button">수정 완료</button>
+      </div>
+    </main>
+
+    <script type="module">
+      import { ensureAuthPage } from "/auth/authGuard.js";
+      await ensureAuthPage();
+    </script>
+    <script type="module">
+    import { mountHeader } from "/component/header/insertHeader.js";
+    (async () => {
+      await mountHeader("header-placeholder", {
+        addProfileMenu: true,
+        addBackButton: true,
+        backHref: "/pages/board/board.html"
+      });
+    })();
+  </script>
+    <!-- Page logic -->
+    <script src="./profileEdit.js" defer></script>
+  </body>
+</html>

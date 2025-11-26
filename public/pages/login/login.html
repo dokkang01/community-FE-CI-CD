@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>로그인</title>
+  <script src="/lib/config.js"></script>
+  <!-- Page-specific styles -->
+  <link rel="stylesheet" href="/component/header/header.css" />
+  <link rel="stylesheet" href="/component/footer/footer.css" />
+
+  <link rel="stylesheet" href="login.css" />
+  <style>
+    /* Page vertical layout so footer sits below main content */
+    body.page-col { display: flex; flex-direction: column; min-height: 100vh; }
+    #header-placeholder { flex: 0 0 auto; }
+    main.container { flex: 1 0 auto; }
+    .site-footer { flex: 0 0 auto; width: 100%; }
+  </style>
+</head>
+<body class="page-col">
+  <div id="header-placeholder"></div>
+  <main class="container">
+    <section class="login-page" aria-labelledby="login-title">
+      <h1 id="login-title">로그인</h1>
+
+      <form id="loginForm" method="post" novalidate>
+        <!-- Email -->
+        <div class="field">
+          <label for="email">이메일*</label>
+          <div>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" aria-describedby="email-help" />
+          </div>
+          <small id="email-help" class="input-help" aria-live="polite"></small>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label for="password">비밀번호*</label>
+          <div>
+            <input id="password" name="password" type="password" placeholder="비밀번호" required minlength="8" autocomplete="current-password" aria-describedby="password-help" />
+          </div>
+          <small id="password-help" class="input-help" aria-live="polite"></small>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button type="submit" id="login-btn">로그인</button>
+          <a class="ghost-btn" href="../signup/signup.html" id="go-signup" aria-label="회원가입 페이지로 이동">회원가입 하러 가기</a>
+        </div>
+      </form>
+
+      <div id="login-error" class="input-help" role="alert" aria-live="assertive" style="text-align:center;"></div>
+      <div id="login-success" role="status" aria-live="polite" style="text-align:center; color:#2ecc71; margin-top:6px;"></div>
+      <div id="message" aria-live="polite"></div>
+    </section>
+  </main>
+  <script type="module">
+    import { mountHeader } from "/component/header/insertHeader.js";
+    mountHeader("header-placeholder", { addProfileMenu: false });
+  </script>
+  <script type="module">
+  import { insertFooter } from "/component/footer/insertFooter.js";
+  insertFooter();
+</script>
+  <script src="login.js"></script>
+</body>
+</html>

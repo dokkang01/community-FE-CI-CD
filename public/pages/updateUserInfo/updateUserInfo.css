@@ -1,0 +1,133 @@
+:root {
+  --header-height: 64px;
+
+  --max-w: 480px;                  /* match login card width */
+  --side-pad: 32px;                /* align with login.css padding */
+  --gap: 16px;
+  --gap-lg: 24px;
+  --radius: 12px;                  /* match login.css rounded */
+
+  /* colors (aligned with login.css) */
+  --fg: #333;                      /* login.css h1 color */
+  --fg-muted: #555;                /* login labels */
+  --page-bg: #f4f6f9;              /* login body bg */
+  --surface: #fff;                 /* card */
+  --line: #e5e7eb;                 /* subtle borders */
+  --primary: #0078ff;              /* login primary */
+  --primary-hover: #005fcc;        /* login hover */
+  --danger: #ef4444;               /* red */
+  --danger-hover: #dc2626;         /* darker red */
+}
+
+/* reserve space for fixed header */
+#header-placeholder { height: var(--header-height); }
+
+/* Body like login.css */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;  /* match login.css */
+  background-color: var(--page-bg);            /* match login.css */
+  color: var(--fg);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Card container like login.css .container */
+.profile-edit {
+  width: 100%;
+  max-width: var(--max-w);
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);  /* same depth */
+  padding: 40px var(--side-pad);
+  box-sizing: border-box;
+  margin: 24px auto 64px;
+}
+
+/* Title like login.css */
+.page-title {
+  text-align: center;
+  color: var(--fg);
+  margin: 0 0 24px 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* Fields */
+.field { display: block; margin-bottom: var(--gap-lg); }
+.field-label {
+  display: block;
+  font-weight: 600;                /* match login label weight */
+  margin-bottom: 10px;
+  color: var(--fg-muted);
+}
+.hint { color: #bec7d2; font-size: 0.95rem; margin: 8px 0 0; text-align: center; }
+
+/* Avatar */
+.avatar-wrap {
+  position: relative; display: inline-block; border-radius: 50%;
+  width: 140px; height: 140px; overflow: hidden; cursor: pointer; user-select: none;
+  border: 1px solid var(--line);
+}
+/* Center avatar picker */
+.field .avatar-wrap {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.avatar-img { width: 100%; height: 100%; display: block; object-fit: cover; transition: filter .2s ease, transform .2s ease; }
+.avatar-overlay { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-weight: 800; letter-spacing: .08em; opacity: 0; background: rgba(0,0,0,.45); transition: opacity .2s ease; }
+.avatar-wrap:hover .avatar-img, .avatar-wrap:focus-visible .avatar-img { filter: brightness(.7); transform: scale(1.02); }
+.avatar-wrap:hover .avatar-overlay, .avatar-wrap:focus-visible .avatar-overlay { opacity: 1; }
+
+/* Inputs like login.css */
+.text-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;          /* login.css */
+  border-radius: 8px;               /* login.css */
+  font-size: 1rem;                  /* login.css */
+  box-sizing: border-box;
+}
+.text-input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.15);  /* login.css */
+}
+
+/* Actions: center buttons like login.css */
+.actions { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: var(--gap-lg); }
+
+/* Base button to mirror login.css .actions button */
+.btn {
+  display: inline-block;
+  width: auto; max-width: none; min-width: 160px;  /* login.css baseline */
+  padding: 12px 20px;             /* login.css */
+  text-align: center; white-space: nowrap; word-break: keep-all;
+  border: none;                    /* login.css has no border */
+  border-radius: 8px;              /* login.css */
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  color: #fff;                     /* default text color for colored buttons */
+  background-color: var(--primary);
+  transition: background-color 0.2s;
+}
+
+/* Specific variants */
+.btn-primary { background-color: var(--primary); }
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-danger { background-color: var(--primary); }
+.btn-danger:hover { background-color: var(--primary-hover); }
+
+.btn-ghost { background-color: #eaeaea; color: #333; }
+.btn-ghost:hover { background-color: #d8d8d8; }
+
+/* Length rules: make 수정하기 slightly longer than 회원탈퇴 */
+#saveBtn { min-width: 200px; }     /* 수정하기 */
+#deleteBtn { min-width: 180px; }   /* 회원탈퇴 */
+
+/* Responsive: match login.css tightening */
+@media (max-width: 480px) {
+  .profile-edit { padding: 24px 20px; }
+}

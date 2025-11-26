@@ -1,0 +1,128 @@
+/* General page layout */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #f4f6f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Container centering */
+.container {
+  width: 100%;
+  max-width: 480px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px 32px;
+  box-sizing: border-box;
+  padding-top: 110px;
+}
+
+/* Page title */
+.login-page h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+/* Form layout */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.field input:focus {
+  border-color: #0078ff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.15);
+}
+
+/* Actions: center buttons */
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.actions button {
+  display: inline-block;
+  width: auto;
+  max-width: none;
+  min-width: 160px;
+  padding: 12px 20px;
+  text-align: center;
+  white-space: nowrap;
+  word-break: keep-all;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #0078ff;
+  color: #fff;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.actions button:hover {
+  background-color: #005fcc;
+}
+
+/* Secondary link-styled button */
+.ghost-btn {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  min-width: 160px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background-color: #eaeaea;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.ghost-btn:hover {
+  background-color: #d8d8d8;
+}
+
+/* Message area */
+#message {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #0078ff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .container {
+    padding: 24px 20px;
+  }
+}
+
+/* Inline helper + validation styles */
+.input-help { display:block; margin-top:6px; font-size:12px; color:#e53935; }
+.is-valid { border-color:#2ecc71 !important; }
+.is-invalid { border-color:#e53935 !important; }
+button[disabled]{ opacity:.6; cursor:not-allowed; }
