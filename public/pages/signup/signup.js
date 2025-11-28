@@ -2,7 +2,6 @@
 const SIGNUP_ENDPOINT = API.ENDPOINTS.SIGNUP;
 const EMAIL_DUP_ENDPOINT = API.ENDPOINTS.EMAIL_DUP;
 const NICK_DUP_ENDPOINT = API.ENDPOINTS.NICK_DUP;
-const TIMEOUT_MS = 15000;
 
 const form = document.getElementById("signup-form");
 const submitBtn = document.getElementById("submit-btn");
@@ -12,6 +11,9 @@ const emailEl = document.getElementById("email");
 const pwEl = document.getElementById("password");
 const pw2El = document.getElementById("password2");
 const nickEl = document.getElementById("username");
+const uploadAreaEl = document.getElementById("upload-area");
+const profileInputEl = document.getElementById("profile");
+const previewImgEl = document.getElementById("preview");
 
 // Helper: find help text node next to each input (expects an element with id `<fieldId>-help`)
 function setHelp(fieldId, message) {
@@ -97,6 +99,8 @@ const state = {
   nickname: false,
   nickDup: true, // pessimistic until checked
 };
+
+let profilePictureKey = "";
 
 function updateSubmitState() {
   const allValid = state.email && !state.emailDup && state.password && state.password2 && state.nickname && !state.nickDup;
@@ -200,6 +204,53 @@ if (nickEl) {
   });
 }
 
+// === Profile image upload (S3 via ImageUploader) ===
+if (uploadAreaEl && profileInputEl) {
+  uploadAreaEl.addEventListener("click", () => {
+    profileInputEl.click();
+  });
+
+  // 키보드 접근성 (Enter/Space로도 동작)
+  uploadAreaEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      profileInputEl.click();
+    }
+  });
+
+  profileInputEl.addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!window.ImageUploader || typeof window.ImageUploader.uploadImage !== "function") {
+      console.error("ImageUploader is not available");
+      alert("이미지 업로드 모듈을 찾을 수 없습니다.");
+      return;
+    }
+
+    try {
+      // 업로드 중 살짝 피드백
+      uploadAreaEl.style.opacity = "0.7";
+
+      const key = await window.ImageUploader.uploadImage("PROFILE", file);
+      profilePictureKey = key;
+
+      if (previewImgEl) {
+        previewImgEl.src = URL.createObjectURL(file);
+        previewImgEl.style.display = "block";
+      }
+
+      uploadAreaEl.classList.add("has-image");
+    } catch (err) {
+      console.error("Profile image upload failed:", err);
+      alert(err.message || "프로필 이미지 업로드에 실패했습니다.");
+    } finally {
+      uploadAreaEl.style.opacity = "";
+      profileInputEl.value = "";
+    }
+  });
+}
+
 // === Submit to backend ===
 async function postSignup(payload) {
   const controller = new AbortController();
@@ -250,7 +301,7 @@ if (form) {
     const password = pwEl ? pwEl.value : "";
     const passwordCheck = pw2El ? pw2El.value : "";
     const nickname = nickEl ? nickEl.value.trim() : "";
-    const profilePicture = "imageUrl"; // TODO: connect real upload
+    const profilePicture = profilePictureKey;
 
     const eRes = validateEmailValue(email);
     const pRes = validatePasswordValue(password);
