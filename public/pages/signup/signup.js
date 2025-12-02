@@ -67,13 +67,13 @@ async function checkDuplicate(kind, value) {
   const endpoint = kind === "email" ? EMAIL_DUP_ENDPOINT : NICK_DUP_ENDPOINT;
   if (!endpoint) return null; 
 
-  const url = new URL(API.url(endpoint));
+  const url = API.url(endpoint);
   url.searchParams.set(kind, value);
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(url.toString(), { method: "GET", credentials: "omit", signal: controller.signal });
+    const res = await fetch(url, { method: "GET", credentials: "omit", signal: controller.signal });
     clearTimeout(timer);
     if (!res.ok) return null; // silently skip if backend doesn't support
     const data = await res.json().catch(() => undefined);
