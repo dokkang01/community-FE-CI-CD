@@ -3,6 +3,8 @@ const SIGNUP_ENDPOINT = API.ENDPOINTS.SIGNUP;
 const EMAIL_DUP_ENDPOINT = API.ENDPOINTS.EMAIL_DUP;
 const NICK_DUP_ENDPOINT = API.ENDPOINTS.NICK_DUP;
 
+console.log("[signup.js] loaded");
+
 const form = document.getElementById("signup-form");
 const submitBtn = document.getElementById("submit-btn");
 const errorBox = document.getElementById("form-error");
@@ -65,10 +67,12 @@ function validateNicknameValue(v) {
 // Optional duplicate checks (no error thrown if endpoint not available)
 async function checkDuplicate(kind, value) {
   const endpoint = kind === "email" ? EMAIL_DUP_ENDPOINT : NICK_DUP_ENDPOINT;
-  if (!endpoint) return null; 
+  if (!endpoint) return null;
 
-  const url = API.url(endpoint);
-  url.searchParams.set(kind, value);
+  // API.url(endpoint)가 절대/상대 경로 어떤 것을 반환하든 문자열로 조합해서 사용
+  const base = API.url(endpoint);
+  const query = new URLSearchParams({ [kind]: value }).toString();
+  const url = `${base}?${query}`;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -206,6 +210,7 @@ if (nickEl) {
 
 // === Profile image upload (S3 via ImageUploader) ===
 if (uploadAreaEl && profileInputEl) {
+  console.log("[signup.js] wiring uploadAreaEl click handler", uploadAreaEl, profileInputEl);
   uploadAreaEl.addEventListener("click", () => {
     profileInputEl.click();
   });
