@@ -79,6 +79,28 @@
       });
     })();
   </script>
+  <script>
+  console.log("inline test script loaded");
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const uploadArea = document.getElementById("upload-area");
+    const fileInput = document.getElementById("profile");
+
+    console.log("uploadArea:", uploadArea);
+    console.log("fileInput:", fileInput);
+
+    if (!uploadArea || !fileInput) {
+      console.log("❌ 요소를 못 찾음");
+      return;
+    }
+
+    uploadArea.addEventListener("click", () => {
+      console.log("✅ upload-area clicked");
+      fileInput.click();
+    });
+  });
+</script>
+  <script src="/functions/uploadPicture.js"></script>
   <script src="signup.js"></script>
 </body>
 </html>

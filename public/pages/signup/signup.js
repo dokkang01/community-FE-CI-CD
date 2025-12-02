@@ -2,7 +2,8 @@
 const SIGNUP_ENDPOINT = API.ENDPOINTS.SIGNUP;
 const EMAIL_DUP_ENDPOINT = API.ENDPOINTS.EMAIL_DUP;
 const NICK_DUP_ENDPOINT = API.ENDPOINTS.NICK_DUP;
-const TIMEOUT_MS = 15000;
+
+console.log("[signup.js] loaded");
 
 const form = document.getElementById("signup-form");
 const submitBtn = document.getElementById("submit-btn");
@@ -12,6 +13,9 @@ const emailEl = document.getElementById("email");
 const pwEl = document.getElementById("password");
 const pw2El = document.getElementById("password2");
 const nickEl = document.getElementById("username");
+const uploadAreaEl = document.getElementById("upload-area");
+const profileInputEl = document.getElementById("profile");
+const previewImgEl = document.getElementById("preview");
 
 // Helper: find help text node next to each input (expects an element with id `<fieldId>-help`)
 function setHelp(fieldId, message) {
@@ -63,15 +67,17 @@ function validateNicknameValue(v) {
 // Optional duplicate checks (no error thrown if endpoint not available)
 async function checkDuplicate(kind, value) {
   const endpoint = kind === "email" ? EMAIL_DUP_ENDPOINT : NICK_DUP_ENDPOINT;
-  if (!endpoint) return null; 
+  if (!endpoint) return null;
 
-  const url = new URL(API.url(endpoint));
-  url.searchParams.set(kind, value);
+  // API.url(endpoint)가 절대/상대 경로 어떤 것을 반환하든 문자열로 조합해서 사용
+  const base = API.url(endpoint);
+  const query = new URLSearchParams({ [kind]: value }).toString();
+  const url = `${base}?${query}`;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(url.toString(), { method: "GET", credentials: "omit", signal: controller.signal });
+    const res = await fetch(url, { method: "GET", credentials: "omit", signal: controller.signal });
     clearTimeout(timer);
     if (!res.ok) return null; // silently skip if backend doesn't support
     const data = await res.json().catch(() => undefined);
@@ -97,6 +103,8 @@ const state = {
   nickname: false,
   nickDup: true, // pessimistic until checked
 };
+
+let profilePictureKey = "";
 
 function updateSubmitState() {
   const allValid = state.email && !state.emailDup && state.password && state.password2 && state.nickname && !state.nickDup;
@@ -200,6 +208,54 @@ if (nickEl) {
   });
 }
 
+// === Profile image upload (S3 via ImageUploader) ===
+if (uploadAreaEl && profileInputEl) {
+  console.log("[signup.js] wiring uploadAreaEl click handler", uploadAreaEl, profileInputEl);
+  uploadAreaEl.addEventListener("click", () => {
+    profileInputEl.click();
+  });
+
+  // 키보드 접근성 (Enter/Space로도 동작)
+  uploadAreaEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      profileInputEl.click();
+    }
+  });
+
+  profileInputEl.addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!window.ImageUploader || typeof window.ImageUploader.uploadImage !== "function") {
+      console.error("ImageUploader is not available");
+      alert("이미지 업로드 모듈을 찾을 수 없습니다.");
+      return;
+    }
+
+    try {
+      // 업로드 중 살짝 피드백
+      uploadAreaEl.style.opacity = "0.7";
+
+      const key = await window.ImageUploader.uploadImage("PROFILE", file);
+      profilePictureKey = key;
+
+      if (previewImgEl) {
+        previewImgEl.src = URL.createObjectURL(file);
+        previewImgEl.style.display = "block";
+      }
+
+      uploadAreaEl.classList.add("has-image");
+    } catch (err) {
+      console.error("Profile image upload failed:", err);
+      alert(err.message || "프로필 이미지 업로드에 실패했습니다.");
+    } finally {
+      uploadAreaEl.style.opacity = "";
+      profileInputEl.value = "";
+    }
+  });
+}
+
 // === Submit to backend ===
 async function postSignup(payload) {
   const controller = new AbortController();
@@ -250,7 +306,7 @@ if (form) {
     const password = pwEl ? pwEl.value : "";
     const passwordCheck = pw2El ? pw2El.value : "";
     const nickname = nickEl ? nickEl.value.trim() : "";
-    const profilePicture = "imageUrl"; // TODO: connect real upload
+    const profilePicture = profilePictureKey;
 
     const eRes = validateEmailValue(email);
     const pRes = validatePasswordValue(password);
