@@ -18,3 +18,4 @@ EXPOSE 3000
 
 # 7. npm start로 앱을 시작
 CMD ["node", "app.js"]
+# 테스트ㄹㄴㅇㄹ

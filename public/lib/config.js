@@ -9,6 +9,7 @@ window.API = {
     SIGNUP: '/users/signup',
     EMAIL_DUP: '/users/check-email',
     NICK_DUP: '/users/check-nickname',
+    IMAGE_UPLOAD: '/images/presigned-upload',
   },
 
   url(path) {
