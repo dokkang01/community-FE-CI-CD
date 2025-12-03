@@ -2,7 +2,7 @@
 const SIGNUP_ENDPOINT = API.ENDPOINTS.SIGNUP;
 const EMAIL_DUP_ENDPOINT = API.ENDPOINTS.EMAIL_DUP;
 const NICK_DUP_ENDPOINT = API.ENDPOINTS.NICK_DUP;
-
+const TIMEOUT_MS = 15000;
 console.log("[signup.js] loaded");
 
 const form = document.getElementById("signup-form");
