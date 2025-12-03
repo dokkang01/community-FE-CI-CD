@@ -29,3 +29,7 @@ async function uploadImage(kind, file) {
   await uploadToS3(uploadUrl, file);
   return key; // 백엔드 DB에 저장할 키
 }
+
+window.ImageUploader = {
+  uploadImage
+};
