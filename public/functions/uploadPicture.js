@@ -1,5 +1,5 @@
 async function getPresignedUrl(kind, file) {
-  const res = await fetch("https://wt5slwq808.execute-api.ap-northeast-2.amazonaws.com/upload-profile-image/upload-profile-image", {
+  const res = await fetch("https://wt5slwq808.execute-api.ap-northeast-2.amazonaws.com/upload-profile-image/profile-image", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
