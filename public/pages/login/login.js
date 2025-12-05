@@ -120,8 +120,10 @@ if (form) {
       if (errorBox) errorBox.textContent = "";
       if (successBox) successBox.textContent = "로그인 성공!";
 
-      
-      window.location.href = "/pages/board/board.html"; 
+      // Clear cached profile picture on login so previous user's avatar does not persist
+      try { localStorage.removeItem('profilePicture'); } catch (_) {}
+
+      window.location.href = "/pages/board/board.html";
     } catch (err) {
       const msg = "*아이디 또는 비밀번호를 확인해주세요";
       if (errorBox) { errorBox.textContent = msg; } else { alert(msg); }
