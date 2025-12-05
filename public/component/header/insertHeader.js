@@ -159,7 +159,13 @@ async function hydrateAvatarFromProfile(imgEl) {
     if (!res.ok) return;
 
     const user = await res.json().catch(() => null);
-    if (!user || !user.profilePicture) return;
+    if (!user || !user.profilePicture) {
+      // 프로필 사진이 없으면 기본 이미지로 되돌리고 캐시 제거
+      const DEFAULT_AVATAR = "/assets/images/default-user.png";
+      imgEl.src = DEFAULT_AVATAR;
+      try { localStorage.removeItem("profilePicture"); } catch (_) {}
+      return;
+    }
 
     let url = user.profilePicture;
 
