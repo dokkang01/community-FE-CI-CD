@@ -161,7 +161,7 @@ async function hydrateAvatarFromProfile(imgEl) {
     const user = await res.json().catch(() => null);
     if (!user || !user.profilePicture) {
       // 프로필 사진이 없으면 기본 이미지로 되돌리고 캐시 제거
-      const DEFAULT_AVATAR = "/assets/images/default-user.png";
+      const DEFAULT_AVATAR = "/assets/images/user.png";
       imgEl.src = DEFAULT_AVATAR;
       try { localStorage.removeItem("profilePicture"); } catch (_) {}
       return;
