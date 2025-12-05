@@ -87,18 +87,21 @@ function addBackButtonTo(container, href) {
 }
 
 function addProfileDropdown(container) {
-  // Prefer a stored user profile image, else fallback initial
+  // 기본 아바타 이미지를 먼저 사용하고, 이후 /users/me로 실제 프로필 사진을 덮어씌운다.
   let avatarUrl = "/assets/images/default-user.png";
-  try { avatarUrl = localStorage.getItem("profilePicture"); } catch(_) {}
-  if (!avatarUrl) {
-    avatarUrl = "/assets/images/user.png"; // 기본 이미지
-  }
+  try {
+    const cached = localStorage.getItem("profilePicture");
+    if (cached) avatarUrl = cached;
+  } catch (_) {}
 
   const img = document.createElement("img");
   img.className = "header-avatar";
   img.alt = "사용자 프로필";
   img.src = avatarUrl;
   container.appendChild(img);
+
+  // 비동기로 백엔드에서 최신 프로필 이미지를 가져와 아바타를 갱신
+  hydrateAvatarFromProfile(img);
 
   const menu = document.createElement("div");
   menu.className = "header-menu";
@@ -144,4 +147,33 @@ function addProfileDropdown(container) {
   });
 
   return img;
+}
+
+async function hydrateAvatarFromProfile(imgEl) {
+  if (!window.API || !API.ENDPOINTS || !API.ENDPOINTS.USERS_ME) return;
+
+  try {
+    const res = await fetch(API.url(API.ENDPOINTS.USERS_ME), {
+      credentials: "include",
+    });
+    if (!res.ok) return;
+
+    const user = await res.json().catch(() => null);
+    if (!user || !user.profilePicture) return;
+
+    let url = user.profilePicture;
+
+    // 백엔드가 key만 내려줄 경우(예: "PROFILE/123.jpg"), S3 base URL을 직접 붙여준다.
+    if (!/^https?:\/\//.test(url)) {
+      const S3_BASE = "https://express-backend-roy.s3.ap-northeast-2.amazonaws.com/";
+      url = S3_BASE.replace(/\/$/, "") + "/" + user.profilePicture.replace(/^\//, "");
+    }
+
+    imgEl.src = url;
+    try {
+      localStorage.setItem("profilePicture", url);
+    } catch (_) {}
+  } catch (e) {
+    console.error("[header] Failed to hydrate avatar from /users/me:", e);
+  }
 }
