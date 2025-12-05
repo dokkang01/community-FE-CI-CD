@@ -88,7 +88,7 @@ function addBackButtonTo(container, href) {
 
 function addProfileDropdown(container) {
   // 기본 아바타 이미지를 먼저 사용하고, 이후 /users/me로 실제 프로필 사진을 덮어씌운다.
-  let avatarUrl = "/assets/images/default-user.png";
+  let avatarUrl = "/assets/images/user.png";
   try {
     const cached = localStorage.getItem("profilePicture");
     if (cached) avatarUrl = cached;
