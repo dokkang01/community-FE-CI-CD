@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>회원정보 수정</title>
     <script src="/lib/config.js"></script>
-    <script src="./updateUserInfo.js"></script>
-    <script src="/functions/uploadPicture.js"></script>
     <script type="module">
       import { ensureAuthPage } from "/auth/authGuard.js";
       await ensureAuthPage();
@@ -58,10 +56,6 @@
       </div>
     </main>
 
-    <script type="module">
-      import { ensureAuthPage } from "/auth/authGuard.js";
-      await ensureAuthPage();
-    </script>
     <script type="module">
     import { mountHeader } from "/component/header/insertHeader.js";
     (async () => {

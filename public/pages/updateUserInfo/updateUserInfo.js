@@ -8,18 +8,13 @@
   const DEFAULT_AVATAR = "/assets/images/user.png";
   const S3_BASE = "https://express-backend-roy.s3.ap-northeast-2.amazonaws.com/";
 
-  const avatarWrap = document.getElementById("avatarWrap");
-  const avatarImg = document.getElementById("avatarImg");
-  const avatarFile = document.getElementById("avatarFile");
-  const nicknameInput = document.getElementById("nicknameInput");
-  const saveBtn = document.getElementById("saveBtn");
-  const doneBtn = document.getElementById("doneBtn");
-  const deleteBtn = document.getElementById("deleteBtn");
-
-  if (!avatarWrap || !avatarImg || !avatarFile || !nicknameInput || !saveBtn) {
-    console.error("[updateUserInfo] 필수 DOM 요소를 찾을 수 없습니다.");
-    return;
-  }
+  let avatarWrap;
+  let avatarImg;
+  let avatarFile;
+  let nicknameInput;
+  let saveBtn;
+  let doneBtn;
+  let deleteBtn;
 
   let currentUserId = null;
   let originalNickname = "";
@@ -242,6 +237,19 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    avatarWrap = document.getElementById("avatarWrap");
+    avatarImg = document.getElementById("avatarImg");
+    avatarFile = document.getElementById("avatarFile");
+    nicknameInput = document.getElementById("nicknameInput");
+    saveBtn = document.getElementById("saveBtn");
+    doneBtn = document.getElementById("doneBtn");
+    deleteBtn = document.getElementById("deleteBtn");
+
+    if (!avatarWrap || !avatarImg || !avatarFile || !nicknameInput || !saveBtn) {
+      console.error("[updateUserInfo] 필수 DOM 요소를 찾을 수 없습니다.");
+      return;
+    }
+
     initEvents();
     void loadCurrentUser();
   });
